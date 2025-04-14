@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +29,7 @@ namespace CipherCraft
 
                     C = (char)(C - 26);
                 }
-                else
+                if(C <'A')
                 {
                     C = (char)(C + 26);
                 }
@@ -47,15 +47,37 @@ namespace CipherCraft
             }
             return asciiValues;
         }
-
+        //r ASCII values of output string.
+        private int[] OutputCode()
+        {
+            string encodedString = Encode(inputString, inputNumber);
+            int[] outputArray = new int[encodedString.Length];
+            for (int i =0; i < encodedString.Length; i++)
+            {
+                outputArray[i] = (int)encodedString[i];
+            }
+            return  outputArray;
+        }
+        // Method to sort the input string
+        private string Sort(string inputString)
+        {
+            char[] charArray = inputString.ToCharArray();
+            Array.Sort(charArray);
+            return new string(charArray);
+        }
         public string Print()
         {
-            return Encode(inputString, inputNumber);
-        }
-        //private string OutputCode(string inputString, int inputNumber)
-        //{
+            string encodedString = Encode(inputString, inputNumber);
+            string sortedString = Sort(inputString); // Assuming Sort() returns a string
+            int[] inputCodeArray = InputCode(inputString); 
+            int[] outputCodeArray = OutputCode();
+            return $"Encoded String: {encodedString}\n" +
+                   $"Sorted String: {sortedString}\n" +
+                   $"Input ASCII Codes: {string.Join(", ", inputCodeArray)}\n" +
+                   $"Output ASCII Codes: {string.Join(", ", outputCodeArray)}";
 
-        //}
+        }
+     
 
         // Method to validate inputs
         public void ValidateInputs(string inputString, int inputNumber)
