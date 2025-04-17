@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CipherCraft
-{
-    class StringProcessing
+{    abstract class abstractStringProcessing{
+    public abstract int[] InputCode();
+    public abstract int[] OutputCode();
+    public abstract string Encode();
+    public abstract string Sort();
+}
+}
+    class StringProcessing : abstractStringProcessing
     {
         //properties
         private string inputString { get; set; }
