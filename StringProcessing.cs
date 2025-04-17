@@ -1,50 +1,65 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CipherCraft
-{    abstract class abstractStringProcessing{
-    public abstract int[] InputCode();
-    public abstract int[] OutputCode();
-    public abstract string Encode();
-    public abstract string Sort();
-}
-}
-    class StringProcessing : abstractStringProcessing
+{
+    // Abstract class for string processing
+    abstract class AbstractStringProcessing
     {
-        //properties
+        public abstract int[] InputCode();
+        public abstract int[] OutputCode();
+        public abstract string Encode();
+        public abstract string Sort();
+    }
+
+    // Enum for encryption types
+    enum EncryptionType
+    {
+        CaesarCipher,
+        Base64
+        // RSA can be added later
+    }
+
+    class StringProcessing : AbstractStringProcessing
+    {
         private string inputString { get; set; }
         private int inputNumber { get; set; }
-        public StringProcessing(string inputString, int inputNumber)
+        private EncryptionType encryptionType { get; set; }
+
+        public StringProcessing(string inputString, int inputNumber, EncryptionType encryptionType)
         {
-            //phân biệt giữa thuộc tính của lớp vs  các tham số được truyền vào phương thức
+            ValidateInputs(inputString, inputNumber);
             this.inputString = inputString;
             this.inputNumber = inputNumber;
+            this.encryptionType = encryptionType;
         }
-        public string Encode(string inputString, int inputNumber)
-        {
-            string result = "";
-            for (int i = 0; i < inputString.Length; i++)
-            {
-                char C = (char)(inputString[i] + inputNumber);
-                if (C > 'Z')
-                {
 
-                    C = (char)(C - 26);
-                }
-                if(C <'A')
+        public override string Encode()
+        {
+            if (encryptionType == EncryptionType.CaesarCipher)
+            {
+                // Perform Caesar Cipher encoding
+                StringBuilder result = new StringBuilder();
+                for (int i = 0; i < inputString.Length; i++)
                 {
-                    C = (char)(C + 26);
+                    char C = (char)(inputString[i] + inputNumber);
+                    if (C > 'Z') C = (char)(C - 26);
+                    if (C < 'A') C = (char)(C + 26);
+                    result.Append(C);
                 }
-                result += C;
+                return result.ToString();
             }
-            return result;
+            else if (encryptionType == EncryptionType.Base64)
+            {
+                // Perform Base64 encoding
+                byte[] bytes = Encoding.UTF8.GetBytes(inputString);
+                return Convert.ToBase64String(bytes);
+            }
+
+            return string.Empty; // Placeholder for other encryption methods
         }
-        //method is only used within the class itself
-        private int[] InputCode(string inputString)
+
+        public override int[] InputCode()
         {
             int[] asciiValues = new int[inputString.Length];
             for (int i = 0; i < inputString.Length; i++)
@@ -53,40 +68,39 @@ namespace CipherCraft
             }
             return asciiValues;
         }
-        //r ASCII values of output string.
-        private int[] OutputCode()
+
+        public override int[] OutputCode()
         {
-            string encodedString = Encode(inputString, inputNumber);
-            int[] outputArray = new int[encodedString.Length];
-            for (int i =0; i < encodedString.Length; i++)
+            string encodedString = Encode();
+            int[] asciiValues = new int[encodedString.Length];
+            for (int i = 0; i < encodedString.Length; i++)
             {
-                outputArray[i] = (int)encodedString[i];
+                asciiValues[i] = (int)encodedString[i];
             }
-            return  outputArray;
+            return asciiValues;
         }
-        // Method to sort the input string
-        private string Sort(string inputString)
+
+        public override string Sort()
         {
             char[] charArray = inputString.ToCharArray();
             Array.Sort(charArray);
             return new string(charArray);
         }
+
         public string Print()
         {
-            string encodedString = Encode(inputString, inputNumber);
-            string sortedString = Sort(inputString); // Assuming Sort() returns a string
-            int[] inputCodeArray = InputCode(inputString); 
+            string encodedString = Encode();
+            string sortedString = Sort(); 
+            int[] inputCodeArray = InputCode();
             int[] outputCodeArray = OutputCode();
             return $"Encoded String: {encodedString}\n" +
                    $"Sorted String: {sortedString}\n" +
                    $"Input ASCII Codes: {string.Join(", ", inputCodeArray)}\n" +
                    $"Output ASCII Codes: {string.Join(", ", outputCodeArray)}";
-
         }
-     
 
-        // Method to validate inputs
-        public void ValidateInputs(string inputString, int inputNumber)
+        // Validate inputs
+        private void ValidateInputs(string inputString, int inputNumber)
         {
             if (string.IsNullOrEmpty(inputString))
             {
@@ -104,8 +118,38 @@ namespace CipherCraft
             {
                 throw new ArgumentException("Input number must be between -25 and 25.");
             }
-        
+        }
+    }
 
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Enter a string (max 40 uppercase letters): ");
+            string inputString = Console.ReadLine();
+
+            Console.Write("Enter shift value (-25 to 25, ignored for Base64): ");
+            int inputNumber = ReadValidInteger();
+
+            Console.WriteLine("Choose encryption type: 1 for Caesar Cipher, 2 for Base64");
+            int choice = int.Parse(Console.ReadLine());
+            EncryptionType encryptionType = choice == 1 ? EncryptionType.CaesarCipher : EncryptionType.Base64;
+
+            StringProcessing processor = new StringProcessing(inputString, inputNumber, encryptionType);
+
+            Console.WriteLine("\n--- OUTPUT ---");
+            Console.WriteLine(processor.Print());
+        }
+
+        // Get a valid integer input
+        public static int ReadValidInteger()
+        {
+            int result;
+            while (!int.TryParse(Console.ReadLine(), out result) || result < -25 || result > 25)
+            {
+                Console.WriteLine("Invalid input! Please enter an integer in the range [-25, 25].");
+            }
+            return result;
+        }
     }
 }
-    }
