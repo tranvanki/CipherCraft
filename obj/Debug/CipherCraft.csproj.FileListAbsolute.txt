@@ -1,0 +1,10 @@
+C:\Users\trung\OneDrive\Desktop\CipherCraft\bin\Debug\CipherCraft.exe.config
+C:\Users\trung\OneDrive\Desktop\CipherCraft\bin\Debug\CipherCraft.exe
+C:\Users\trung\OneDrive\Desktop\CipherCraft\bin\Debug\CipherCraft.pdb
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.csproj.AssemblyReference.cache
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.Properties.Resources.resources
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.csproj.GenerateResource.cache
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.csproj.CoreCompileInputs.cache
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.exe
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.pdb
+C:\Users\trung\OneDrive\Desktop\CipherCraft\obj\Debug\CipherCraft.Form1.resources
